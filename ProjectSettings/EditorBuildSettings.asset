@@ -15,6 +15,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Lobby.unity
     guid: d84d37f9055aa524694725010b4575fb
   - enabled: 1
-    path: Assets/Scenes/The Mansion.unity
+    path: Assets/Scenes/The_Mansion.unity
     guid: cbfe36cfddfde964d9dfce63a355d5dd
   m_configObjects: {}
