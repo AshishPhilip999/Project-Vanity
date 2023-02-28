@@ -16,6 +16,7 @@ TagManager:
   - Culler
   - Walls
   - Light Culler
+  - Overlay
   layers:
   - Default
   - TransparentFX
