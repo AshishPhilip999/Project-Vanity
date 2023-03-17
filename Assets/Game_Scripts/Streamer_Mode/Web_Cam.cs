@@ -6,14 +6,13 @@ using UnityEngine.UI;
 public class Web_Cam : MonoBehaviour
 {
 
-    public RawImage image;
     WebCamTexture webCam;
 
      void Start()
     {
        webCam = new WebCamTexture();
 
-        image.texture = webCam;
+        this.gameObject.GetComponent<RawImage>().texture = webCam;
 
         webCam.Play();
     }
