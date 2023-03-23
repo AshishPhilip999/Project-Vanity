@@ -8,12 +8,12 @@ public class Open_Scene : MonoBehaviourPunCallbacks
 {
     public void CreateStreamerMode()
     {
-        PhotonNetwork.CreateRoom("The_room");
+        PhotonNetwork.CreateRoom("stream_room");
     }
 
     public void JoinStreamMode()
     {
-        PhotonNetwork.JoinRoom("The_room");
+        PhotonNetwork.JoinRoom("stream_room");
     }
 
     public override void OnJoinedRoom()
