@@ -13,7 +13,7 @@ public class Streamer_Mode_Connectivity : MonoBehaviourPunCallbacks
 
     public void Join_Streamer_Mode()
     {
-        PhotonNetwork.JoinRandomRoom();
+        PhotonNetwork.JoinRoom("Streamer Mode");
     }
 
     public override void OnJoinedRoom()
