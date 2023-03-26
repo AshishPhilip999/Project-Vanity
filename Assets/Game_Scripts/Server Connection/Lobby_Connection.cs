@@ -3,22 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using UnityEngine.SceneManagement;
+using Photon.Realtime;
 
 public class Lobby_Connection : MonoBehaviourPunCallbacks
 {
     // Start is called before the first frame update
-    void Start()
+     void Start()
     {
+        print("Connecting to server ...");    
+        PhotonNetwork.GameVersion = "0.0.1";
         PhotonNetwork.ConnectUsingSettings();
     }
 
     public override void OnConnectedToMaster()
     {
-        PhotonNetwork.JoinLobby();
+        print("Connected to server !");
+        PhotonNetwork.LoadLevel(2);
     }
 
-    public override void OnJoinedLobby()
+    public override void OnDisconnected(DisconnectCause cause)
     {
-        SceneManager.LoadScene("Lobby");
+        print("Discconnected from server due to : " + cause.ToString());
     }
 }
