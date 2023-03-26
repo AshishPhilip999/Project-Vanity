@@ -10,8 +10,6 @@ public class Lobby_Connection : MonoBehaviourPunCallbacks
     // Start is called before the first frame update
      void Start()
     {
-        print("Connecting to server ...");    
-        PhotonNetwork.GameVersion = "0.0.1";
         PhotonNetwork.ConnectUsingSettings();
     }
 
