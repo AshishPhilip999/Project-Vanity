@@ -17,12 +17,13 @@ public class Lobby_Connection : MonoBehaviourPunCallbacks
 
     public override void OnConnectedToMaster()
     {
-        print("Connected to server !");
-        PhotonNetwork.LoadLevel(2);
+        print("Connected to server ");
+        PhotonNetwork.JoinLobby();
     }
 
-    public override void OnDisconnected(DisconnectCause cause)
+    public override void OnJoinedLobby()
     {
-        print("Discconnected from server due to : " + cause.ToString());
+        print("Joined Lobby");
+        SceneManager.LoadScene("Lobby");
     }
 }
