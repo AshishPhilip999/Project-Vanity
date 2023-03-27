@@ -6,7 +6,7 @@ using Photon.Pun;
 
 public class Stream_Cam_To_Server : MonoBehaviourPunCallbacks
 {
-    public Canvas StreamModeUI;
+    public GameObject StreamModeUI;
     public GameObject canvas;
 
     // Start is called before the first frame update
