@@ -7,4 +7,9 @@ using Photon.Pun;
 public class Message : MonoBehaviour
 {
     public Text message;
+
+     void Start()
+    {
+        GetComponent<RectTransform>().SetAsFirstSibling();
+    }
 }
