@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Lobby_Menu/Streamer_Mode.unity
     guid: 3cf9d00dc5b46f0469d3cbda1e22d3d2
+  - enabled: 1
+    path: Assets/Scenes/TestScene.unity
+    guid: b950869e12e2f984489fcf00be53529d
   m_configObjects: {}
