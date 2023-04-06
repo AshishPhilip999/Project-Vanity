@@ -8,12 +8,16 @@ public class Set_Player_Username : MonoBehaviour
 {
     public InputField Username;
     public GameObject MainMenu;
+
+    public GameObject usernameUI;
     public void Set_Player_Name(GameObject button)
     {
         PhotonNetwork.NickName = Username.text;
         PlayerPrefs.SetString("Username" , Username.text);
-        MainMenu.SetActive(true);
+       
         button.SetActive(false);
         Username.gameObject.SetActive(false);
+        usernameUI.SetActive(false);
+        MainMenu.SetActive(true);
     }
 }
