@@ -19,6 +19,7 @@ TagManager:
   - Overlay
   - DefaultCanvas
   - PlayerPage
+  - SpawnPosition
   layers:
   - Default
   - TransparentFX
