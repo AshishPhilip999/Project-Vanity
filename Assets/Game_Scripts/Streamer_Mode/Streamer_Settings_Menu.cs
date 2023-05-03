@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Pun;
 using Photon.Voice;
 
-public class Streamer_Settings_Menu : MonoBehaviour
+public class Streamer_Settings_Menu : MonoBehaviourPunCallbacks
 {
+    public PhotonView thisView;
+
     public GameObject SelectedTop;
 
     public GameObject[] Contents;
@@ -21,23 +24,29 @@ public class Streamer_Settings_Menu : MonoBehaviour
     {
         DisableContents();
         Contents[0].SetActive(true);
+
+        thisView = GetComponent<PhotonView>();
     }
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if(PhotonNetwork.IsMasterClient)
         {
-            if(!streamer_settings_active)
+            if (Input.GetKeyDown(KeyCode.Escape))
             {
-                streamer_settings_active = true;
+                if (!streamer_settings_active)
+                {
+                    streamer_settings_active = true;
 
-                streamer_settings_anim.SetBool("isOpen" , true);
+                    streamer_settings_anim.SetBool("isOpen", true);
 
-            }else
-            {
-                streamer_settings_anim.SetBool("isOpen" , false);
+                }
+                else
+                {
+                    streamer_settings_anim.SetBool("isOpen", false);
 
-                streamer_settings_active = false;
+                    streamer_settings_active = false;
+                }
             }
         }
 
@@ -63,9 +72,16 @@ public class Streamer_Settings_Menu : MonoBehaviour
         }
     }
 
-    public void EnableVideoPlayer(Toggle useVideoPlayer)
+    public void EnableDisableVideoPlayer(Toggle useVideoPlayer)
     {
-        if(useVideoPlayer.isOn)
+        thisView.RPC("EnableVideoPlayer" , RpcTarget.AllBuffered , useVideoPlayer.isOn);
+    }
+
+
+    [PunRPC]
+    public void EnableVideoPlayer(bool useVideoPlayer)
+    {
+        if(useVideoPlayer)
         {
             videoPlayerIcon.SetActive(true);
         }
