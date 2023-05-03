@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using Photon.Voice;
 
 public class Streamer_Settings_Menu : MonoBehaviour
 {
@@ -11,6 +13,9 @@ public class Streamer_Settings_Menu : MonoBehaviour
     public bool streamer_settings_active = false;
 
     public Animator streamer_settings_anim;
+
+    public GameObject videoPlayerIcon;
+    public GameObject streamMic;
 
     private void Start()
     {
@@ -58,4 +63,20 @@ public class Streamer_Settings_Menu : MonoBehaviour
         }
     }
 
+    public void EnableVideoPlayer(Toggle useVideoPlayer)
+    {
+        if(useVideoPlayer.isOn)
+        {
+            videoPlayerIcon.SetActive(true);
+        }
+        else
+        {
+            videoPlayerIcon.SetActive(false);
+        }
+    }
+
+    public void EnablePlayerMic(Toggle useMic)
+    {
+        
+    }
 }
