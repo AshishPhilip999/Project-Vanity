@@ -94,8 +94,11 @@ public class Video_Player : MonoBehaviourPunCallbacks
     public void PlayVideo()
     {
         videoisplaying = true;
-        PlayButton.SetActive(false);
-        PauseButton.SetActive(true);
+       if(PhotonNetwork.IsMasterClient)
+        {
+            PlayButton.SetActive(false);
+            PauseButton.SetActive(true);
+        }
         videoPlayer.Play();
     }
 
@@ -103,8 +106,11 @@ public class Video_Player : MonoBehaviourPunCallbacks
     public void PauseVideo()
     {
         videoisplaying = false;
-        PlayButton.SetActive(true);
-        PauseButton.SetActive(false);
+        if(PhotonNetwork.IsMasterClient)
+        {
+            PlayButton.SetActive(true);
+            PauseButton.SetActive(false);
+        }
         videoPlayer.Pause();
     }
 
