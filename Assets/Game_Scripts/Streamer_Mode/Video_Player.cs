@@ -7,6 +7,8 @@ using Photon.Pun;
 
 public class Video_Player : MonoBehaviourPunCallbacks
 {
+    private double syncmargin = 3.0;
+
     [SerializeField]
     private RenderTexture videotexture;
 
@@ -156,10 +158,14 @@ public class Video_Player : MonoBehaviourPunCallbacks
     }
     
     [PunRPC]
-    public IEnumerator SyncVideoPlayer( double time )
+    public void SyncVideoPlayer( double time )
     {
-        videoPlayer.time = time;
-        yield return new WaitForSeconds(3.0f);
+        double currsynctime = videoPlayer.time - time;
+
+        if( currsynctime > syncmargin || currsynctime  < (-syncmargin) )
+        {
+            videoPlayer.time = time;
+        }
     }
     
 
