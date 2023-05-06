@@ -45,6 +45,21 @@ public class Video_Player : MonoBehaviourPunCallbacks
             PauseButton.SetActive(false);
         }
     }
+
+    private void Update()
+    {
+
+        if(PhotonNetwork.IsMasterClient )
+        {
+            if(Input.GetKey("s"))
+            {
+                videoPlayer.time += 3.0;
+            }
+
+            thisView.RPC("SyncVideoPlayer" , RpcTarget.OthersBuffered , videoPlayer.time);
+        }
+
+    }
     public void OnClickVideoButton()
     {
         if(!videoplayeron)
@@ -140,6 +155,11 @@ public class Video_Player : MonoBehaviourPunCallbacks
         videoplayeranim.SetBool("isOn" , false);
     }
     
-
+    [PunRPC]
+    public void SyncVideoPlayer( double time )
+    {
+        videoPlayer.time = time;
+    }
+    
 
 }
