@@ -156,9 +156,10 @@ public class Video_Player : MonoBehaviourPunCallbacks
     }
     
     [PunRPC]
-    public void SyncVideoPlayer( double time )
+    public IEnumerator SyncVideoPlayer( double time )
     {
         videoPlayer.time = time;
+        yield return new WaitForSeconds(3.0f);
     }
     
 
