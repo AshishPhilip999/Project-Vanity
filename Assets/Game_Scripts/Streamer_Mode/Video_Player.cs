@@ -43,8 +43,8 @@ public class Video_Player : MonoBehaviourPunCallbacks
         }
         else
         {
-            PlayButton.SetActive(false);
-            PauseButton.SetActive(false);
+            PlayButton.GetComponent<Button>().interactable = false;
+            PauseButton.GetComponent<Button>().interactable = false;
         }
     }
 
@@ -111,11 +111,9 @@ public class Video_Player : MonoBehaviourPunCallbacks
     public void PlayVideo()
     {
         videoisplaying = true;
-       if(PhotonNetwork.IsMasterClient)
-        {
-            PlayButton.SetActive(false);
-            PauseButton.SetActive(true);
-        }
+
+        PlayButton.SetActive(false);
+        PauseButton.SetActive(true);
         videoPlayer.Play();
     }
 
@@ -123,11 +121,10 @@ public class Video_Player : MonoBehaviourPunCallbacks
     public void PauseVideo()
     {
         videoisplaying = false;
-        if(PhotonNetwork.IsMasterClient)
-        {
-            PlayButton.SetActive(true);
-            PauseButton.SetActive(false);
-        }
+
+        PlayButton.SetActive(true);
+        PauseButton.SetActive(false);
+        
         videoPlayer.Pause();
     }
 
