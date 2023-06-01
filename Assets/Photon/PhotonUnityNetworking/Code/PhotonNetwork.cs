@@ -3232,7 +3232,13 @@ namespace Photon.Pun
             }
         }
 
-        #endif
+        public static void ConnectToRegion(object cloudRegionCode)
+        {
+            throw new NotImplementedException();
+        }
+
+
+#endif
 
     }
 }

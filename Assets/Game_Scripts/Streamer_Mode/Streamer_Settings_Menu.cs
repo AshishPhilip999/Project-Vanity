@@ -19,6 +19,10 @@ public class Streamer_Settings_Menu : MonoBehaviourPunCallbacks
 
     public GameObject videoPlayerIcon;
     public GameObject streamMic;
+    public GameObject CameraHandler;
+
+    public Toggle UseCamera;
+
 
     private void Start()
     {
@@ -30,27 +34,37 @@ public class Streamer_Settings_Menu : MonoBehaviourPunCallbacks
 
     private void Update()
     {
-        if(PhotonNetwork.IsMasterClient)
+       if(PhotonNetwork.IsMasterClient)
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                if (!streamer_settings_active)
+               if (!Video_Player.VideoQueuePanelOn)
                 {
-                    streamer_settings_active = true;
+                    if (!streamer_settings_active)
+                    {
+                        streamer_settings_active = true;
 
-                    streamer_settings_anim.SetBool("isOpen", true);
+                        streamer_settings_anim.SetBool("isOpen", true);
 
-                }
-                else
-                {
-                    streamer_settings_anim.SetBool("isOpen", false);
+                    }
+                    else
+                    {
+                        streamer_settings_anim.SetBool("isOpen", false);
 
-                    streamer_settings_active = false;
+                        streamer_settings_active = false;
+                    }
                 }
             }
+
+            EnableCamera(UseCamera.isOn);
         }
 
         
+    }
+
+    public void EnableCamera(bool usecam)
+    {
+        thisView.RPC("UseCameraOnServer", RpcTarget.AllBuffered , usecam);
     }
 
     public void SelectMenu(GameObject button)
@@ -89,6 +103,12 @@ public class Streamer_Settings_Menu : MonoBehaviourPunCallbacks
         {
             videoPlayerIcon.SetActive(false);
         }
+    }
+
+    [PunRPC]
+    public void UseCameraOnServer(bool usecam)
+    {
+        CameraHandler.SetActive(usecam);
     }
 
     public void EnablePlayerMic(Toggle useMic)

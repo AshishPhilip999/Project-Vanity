@@ -5,74 +5,103 @@ using Photon.Pun;
 
 public class Item_Spawner : MonoBehaviour
 {
-    public GameObject[] SpawnPositions;
+    public float startx;
+    public float endx;
+    public float startz;
+    public float endz;
 
-    public GameObject keys;
+    public GameObject[] Drawers;
 
-    public GameObject Pen;
+    public GameObject Key;
 
-    public int TotalKeys;
-
-    List<int> randomslist;
+     List<Drawer> DrawerComponent;
 
     // Start is called before the first frame update
     void Start()
     {
-        randomslist = new List<int>();
-        SpawnPositions = GameObject.FindGameObjectsWithTag("SpawnPosition");
+        DrawerComponent = new List<Drawer>();
+        Drawers = GameObject.FindGameObjectsWithTag("Movable");
 
-        for(int i = 0; i < SpawnPositions.Length; i++)
-        {
-            randomslist.Add(i);
-        }
+        Movable_Object_System.SortByName(Drawers);
 
-        int TotalKeys = Random.Range(1,4);
-        int TotalPens = Random.Range(3,4);
-
-        
-
-        for(int i = 0; i < TotalKeys; i++)
-        {
-            int randomIndex = GetRandomPosition();
-
-            int randomY = Random.Range(0, 360);
-
-            GameObject key = PhotonNetwork.Instantiate(keys.name , SpawnPositions[randomIndex].transform.position , Quaternion.identity );
-
-            key.transform.rotation = Quaternion.Euler(90,0,0);
-            key.transform.position += new Vector3(0 , 0.009f , 0);
-
-            key.transform.SetParent(SpawnPositions[randomIndex].transform , true);
-
-        }
-
-        //pens
-        for (int i = 0; i < TotalPens; i++)
-        {
-            int randomIndex = GetRandomPosition();
-
-            int randomY = Random.Range(0, 180);
-
-            GameObject pen = PhotonNetwork.Instantiate(Pen.name, SpawnPositions[randomIndex].transform.position, Quaternion.identity);
-
-            pen.transform.rotation = Quaternion.Euler(0, 0, 0);
-            pen.transform.position += new Vector3(0, 0.009f, 0);
-
-            pen.transform.SetParent(SpawnPositions[randomIndex].transform, true);
-
-        }
+        SpawnKeys(Key , 2 , 6);
 
 
     }
 
-    public int GetRandomPosition()
+    public void SpawnKeys(GameObject obj , int min , int max)
     {
-        int index = Random.Range(0 , randomslist.Count);
+       GenerateSpawnPointsDrawer(0.1f);
 
-        int num = randomslist[index];
+        int total = Random.Range(min , max);
 
-        randomslist.RemoveAt(index);
+        for (int i = 0; i < total; i++)
+        {
+            int randomdrawer = Random.Range(0, DrawerComponent.Count);
+            Drawer curr = DrawerComponent[randomdrawer];
 
-        return num;
+
+            int randompoint = Random.Range(0, curr.points.Count);
+
+            GameObject thisobj = Instantiate(Key, new Vector3(), Quaternion.Euler(90, 0, 0));
+            thisobj.transform.SetParent(curr.drawer.transform);
+
+            thisobj.transform.localPosition = curr.points[randompoint];
+
+            thisobj.transform.localScale =   new Vector3(3, 2.014239f, 3);
+
+            curr.points.RemoveAt(randompoint);
+
+            if (curr.points.Count == 0)
+            {
+                DrawerComponent.RemoveAt(randomdrawer);
+            }
+
+        }
+
+
+
+    }
+
+    public void GenerateSpawnPointsDrawer(float min_distance)
+    {
+
+        foreach(GameObject Drawer in Drawers)
+        {
+            Drawer currdrawer = new Drawer(Drawer);
+            List<Vector3> SpawnPositions = new List<Vector3>();
+            BoxCollider collider = Drawer.GetComponent<BoxCollider>();
+
+            startx = collider.center.x - collider.size.x / 2.40f;
+            endx = collider.center.x + collider.size.x / 2.40f;
+
+            startz = collider.center.y - collider.size.y / 2.10f;
+            endz = collider.center.y + collider.size.y / 2.10f;
+
+
+            for (float i = startx; i < endx; i += min_distance)
+            {
+                for (float j = startz; j < endz; j += min_distance)
+                {
+                    SpawnPositions.Add(new Vector3(i, j, (collider.center.z + (collider.size.z / 2.3f))));
+                }
+            }
+            currdrawer.points = SpawnPositions;
+
+            DrawerComponent.Add(currdrawer);
+        }
+        
+    }
+}
+
+class Drawer
+{
+   public GameObject drawer;
+
+   public List<Vector3> points;
+
+    public Drawer(GameObject drawer)
+    {
+        this.drawer = drawer;
     }
 }

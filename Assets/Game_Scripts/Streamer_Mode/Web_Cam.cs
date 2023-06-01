@@ -15,9 +15,8 @@ public class Web_Cam : MonoBehaviour
 
     private bool isMasterClient;
 
-    public bool isStreaming;
-
-    public bool isSending;
+    private Texture2D texture;
+    private byte[] bytes;
 
     private void Start()
     {
@@ -25,76 +24,70 @@ public class Web_Cam : MonoBehaviour
 
         isMasterClient = PhotonNetwork.IsMasterClient;
 
-        if (isMasterClient)
-        {
-            // Start the webcam
-            webcamTexture = new WebCamTexture();
-            webcamTexture.Play();
-        }
+
+        // Start the webcam
+        webcamTexture = new WebCamTexture();
+        webcamTexture.Play();
+       
     }
 
     private void Update()
     {
-        if (!isMasterClient)
-        {
-            return;
-        }
+      
+      rawImage.texture = webcamTexture;
+      SendWebcamTexture();
 
-        // Update the texture
-        if (webcamTexture != null && webcamTexture.isPlaying)
-        {
-            rawImage.texture = webcamTexture;
-        }
-
-        if(isStreaming)
-        {
-            if(isSending)
-            {
-                SendWebcamTexture();
-            }
-        }
     }
 
     public void SendWebcamTexture()
     {
-        isStreaming = true;
+        if (!isMasterClient) return;
 
-        isSending = false;
-        if (!isMasterClient)
+        if (texture == null || texture.width != webcamTexture.width || texture.height != webcamTexture.height)
         {
-            Debug.Log("Only the master client can start the webcam texture transfer.");
-            return;
+            texture = new Texture2D(webcamTexture.width, webcamTexture.height, TextureFormat.RGB24, false);
         }
 
-        if (webcamTexture == null || !webcamTexture.isPlaying)
-        {
-            Debug.Log("Webcam texture is not available.");
-            return;
-        }
+        texture.SetPixels(webcamTexture.GetPixels());
+        texture.Apply();
 
-        // Encode the texture and send it through an RPC
-        byte[] bytes = EncodeTextureToJPG(webcamTexture);
+        bytes = texture.EncodeToJPG();
         photonView.RPC("ReceiveWebcamTexture", RpcTarget.Others, bytes);
 
-        isSending = true;
     }
 
     [PunRPC]
-    private void ReceiveWebcamTexture(byte[] bytes)
+    private void ReceiveWebcamTexture(byte[] webcamTextureBytes)
     {
-        // Decode the received bytes into a texture and assign it to the RawImage
-        Texture2D texture = new Texture2D(1, 1);
-        texture.LoadImage(bytes);
-        rawImage.texture = texture;
+        if (texture == null || texture.width != webcamTexture.width || texture.height != webcamTexture.height)
+        {
+            texture = new Texture2D(webcamTexture.width, webcamTexture.height, TextureFormat.RGB24, false);
+        }
+
+        texture.LoadImage(webcamTextureBytes);
+        GetComponent<Renderer>().material.mainTexture = texture;
     }
 
-    private byte[] EncodeTextureToJPG(WebCamTexture texture)
+    /*private byte[] EncodeTextureToJPG(WebCamTexture texture)
     {
         Texture2D tex = new Texture2D(texture.width, texture.height, TextureFormat.RGB24, false);
         tex.SetPixels(texture.GetPixels());
         tex.Apply();
 
         return tex.EncodeToJPG();
+    }*/
+
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(bytes);
+        }
+        else
+        {
+            bytes = (byte[])stream.ReceiveNext();
+        }
     }
 
     private void OnDestroy()

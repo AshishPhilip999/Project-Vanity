@@ -11,6 +11,7 @@ public class Lobby_Connection : MonoBehaviourPunCallbacks
      void Start()
     {
         PhotonNetwork.ConnectUsingSettings();
+        
     }
 
     public override void OnConnectedToMaster()

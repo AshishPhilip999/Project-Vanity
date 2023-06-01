@@ -15,7 +15,7 @@ public class Movable_Object_System : MonoBehaviour
         SortByName(Doors);
     }
 
-    void SortByName(GameObject[] Objects)
+   public static void SortByName(GameObject[] Objects)
     {
         for(int i = 0; i < Objects.Length - 1; i++)
         {
@@ -31,7 +31,7 @@ public class Movable_Object_System : MonoBehaviour
         }
     }
 
-    public int SingleParse(string ObjectName)
+   public static int SingleParse(string ObjectName)
     {
         int index;
         string stringindex = ObjectName.Substring(1, ObjectName.Length - 1);

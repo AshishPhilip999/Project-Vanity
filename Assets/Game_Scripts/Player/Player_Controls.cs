@@ -83,7 +83,7 @@ public class Player_Controls : MonoBehaviourPunCallbacks , IPunObservable
                         if(hit.collider.tag == "Movable")
                         {
                             GameObject currObject = hit.collider.gameObject;
-                            int Index = MovablesSystem.SingleParse(currObject.name);
+                            int Index = Movable_Object_System.SingleParse(currObject.name);
                             Vector3 Direction = currObject.transform.position - transform.position;
 
                             angle = Vector3.Angle(currObject.transform.up , Direction);
@@ -112,7 +112,7 @@ public class Player_Controls : MonoBehaviourPunCallbacks , IPunObservable
                         if (hit.collider.tag == "Door")
                         {
                             GameObject currObject = hit.collider.gameObject;
-                            int Index = MovablesSystem.SingleParse(currObject.name);
+                            int Index = Movable_Object_System.SingleParse(currObject.name);
                             Vector3 Direction = currObject.transform.position - transform.position;
                             int sign = (Direction.z >= 0) ? -1 : 1;
 

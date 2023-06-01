@@ -7,6 +7,10 @@ using Photon.Pun;
 
 public class Video_Player : MonoBehaviourPunCallbacks
 {
+    [SerializeField]
+    public static bool VideoQueuePanelOn;
+
+
     private double syncmargin = 3.0;
 
     [SerializeField]
@@ -20,8 +24,10 @@ public class Video_Player : MonoBehaviourPunCallbacks
 
     public GameObject MuteButton;
     public GameObject UnMuteButton;
+    public GameObject AddToQueuePanel;
 
     public Text VideoTitle;
+    public InputField URLInput;
 
     [SerializeField]
     private Animator videoplayeranim;
@@ -31,6 +37,7 @@ public class Video_Player : MonoBehaviourPunCallbacks
 
     private bool videoplayeron;
     private bool videoisplaying;
+    
 
     private void Start()
     {
@@ -61,7 +68,30 @@ public class Video_Player : MonoBehaviourPunCallbacks
             thisView.RPC("SyncVideoPlayer" , RpcTarget.OthersBuffered , videoPlayer.time);
         }
 
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            if(VideoQueuePanelOn)
+            {
+                AddToQueueWaive();
+            }
+        }
+
     }
+
+
+    public void AddToQueueInvoke()
+    {
+        AddToQueuePanel.SetActive(true);
+        VideoQueuePanelOn = true;
+    }
+
+    public void AddToQueueWaive()
+    {
+        AddToQueuePanel.SetActive(false);
+        VideoQueuePanelOn = false;
+    }
+
+
     public void OnClickVideoButton()
     {
         if(!videoplayeron)
@@ -86,7 +116,9 @@ public class Video_Player : MonoBehaviourPunCallbacks
 
     public void OnClickInstantiateVideo()
     {
-        thisView.RPC("InstantiateVideo" , RpcTarget.AllBuffered , "Vanity Old Intro - By PieDom Studios" , "https://raw.githubusercontent.com/DataGramOfficial/VideoPlayer/main/Vanity%20Intro-1_Trim.mp4");
+        thisView.RPC("InstantiateVideo" , RpcTarget.AllBuffered , "Vanity Old Intro - By PieDom Studios" , URLInput.text);
+        AddToQueueWaive();
+
     }
 
     [PunRPC]
